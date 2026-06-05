@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flyers Exam 1 Speaking Booklet</title>
+  <style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: #16212c;
+  background: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.42;
+}
+
+.cover,
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 30px 36px;
+}
+
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 18px solid #005ea8;
+}
+
+.cover.flyers { border-color: #1f7a4d; }
+
+.label {
+  color: #005ea8;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.flyers .label { color: #1f7a4d; }
+
+h1 {
+  margin: 14px 0 10px;
+  font-size: 40px;
+  line-height: 1.08;
+}
+
+h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.sub {
+  max-width: 740px;
+  color: #52606d;
+  font-size: 17px;
+}
+
+.notice {
+  border: 1.5px solid #aeb8c2;
+  border-left: 6px solid #9b1c1c;
+  padding: 11px 13px;
+  color: #52606d;
+  font-size: 13px;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: start;
+  border-bottom: 3px solid #005ea8;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.head.flyers { border-color: #1f7a4d; }
+
+.time {
+  min-width: 170px;
+  text-align: center;
+  color: #fff;
+  background: #005ea8;
+  padding: 9px 12px;
+  font-weight: 700;
+}
+
+.flyers .time { background: #1f7a4d; }
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.info div,
+.card {
+  border: 1.5px solid #aeb8c2;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.info div {
+  background: #f3f6f9;
+  font-size: 12px;
+}
+
+.topic {
+  margin: 12px 0 18px;
+  padding: 10px 12px;
+  background: #e8f3fc;
+  border-left: 5px solid #005ea8;
+}
+
+.flyers .topic {
+  background: #edf8f2;
+  border-color: #1f7a4d;
+}
+
+.part {
+  margin: 18px 0;
+  border: 1.5px solid #aeb8c2;
+  break-inside: avoid;
+}
+
+.part-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  color: #fff;
+  background: #005ea8;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.flyers .part-title { background: #1f7a4d; }
+
+.part-title small {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.part-body { padding: 12px; }
+
+.script {
+  border: 1.5px solid #8a5a00;
+  background: #fff7e6;
+  margin: 10px 0 12px;
+}
+
+.script-label {
+  padding: 6px 9px;
+  color: #fff;
+  background: #8a5a00;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.script-text {
+  padding: 10px 12px;
+}
+
+.script-text p { margin: 0 0 8px; }
+.script-text p:last-child { margin-bottom: 0; }
+
+.stage {
+  color: #52606d;
+  font-style: italic;
+}
+
+.grid-2,
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card.shaded { background: #f3f6f9; }
+
+.card h3,
+.card h4 {
+  color: #005ea8;
+}
+
+.flyers .card h3,
+.flyers .card h4 {
+  color: #1f7a4d;
+}
+
+ol,
+ul {
+  margin: 6px 0 0 20px;
+  padding: 0;
+}
+
+li { margin: 4px 0; }
+
+.prompt-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 10px 0 12px;
+  list-style: none;
+}
+
+.prompt-list li {
+  margin: 0;
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 1.5px solid #aeb8c2;
+  background: #f3f6f9;
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 12px;
+}
+
+th,
+td {
+  border: 1.5px solid #aeb8c2;
+  padding: 7px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th { background: #f3f6f9; }
+
+.candidate-card-page {
+  border: 2px dashed #aeb8c2;
+  padding: 14px;
+  margin: 16px 0;
+  break-inside: avoid;
+}
+
+.large-card {
+  min-height: 175px;
+  padding: 15px;
+  border: 2px solid #16212c;
+  background: #fff;
+}
+
+.large-card h3 {
+  text-align: center;
+  color: #16212c;
+}
+
+.marks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.marks div {
+  border: 1.5px solid #aeb8c2;
+  background: #f3f6f9;
+  padding: 8px;
+  font-size: 12px;
+}
+
+.assessment {
+  margin-top: 22px;
+  border-top: 3px solid #005ea8;
+  padding-top: 14px;
+  break-inside: avoid;
+}
+
+.flyers .assessment {
+  border-color: #1f7a4d;
+}
+
+.assessment h2 {
+  margin-bottom: 10px;
+}
+
+.score-table td,
+.score-table th {
+  height: 34px;
+}
+
+.score-cell {
+  width: 70px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.total-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.total-box div {
+  min-height: 50px;
+  border: 1.5px solid #aeb8c2;
+  padding: 8px;
+  background: #fff;
+}
+
+.comment-box {
+  min-height: 92px;
+  border: 1.5px solid #aeb8c2;
+  padding: 8px;
+  background: #fff;
+}
+
+.hub {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 34px 36px;
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.hub-card {
+  border: 1.5px solid #aeb8c2;
+  padding: 16px;
+  background: #fff;
+}
+
+.hub-card h2 {
+  font-size: 21px;
+  margin-bottom: 8px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 11px;
+  color: #fff;
+  background: #005ea8;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 2px;
+}
+
+.btn.secondary {
+  color: #005ea8;
+  background: #e8f3fc;
+}
+
+.btn.flyers {
+  background: #1f7a4d;
+}
+
+.btn.flyers.secondary {
+  color: #1f7a4d;
+  background: #edf8f2;
+}
+
+@media print {
+  .cover,
+  .page {
+    max-width: none;
+    min-height: auto;
+    padding: 15mm;
+  }
+
+  .part,
+  .script,
+  .candidate-card-page,
+  .large-card {
+    break-inside: avoid;
+  }
+}
+
+@media (max-width: 800px) {
+  .cover,
+  .page,
+  .hub {
+    padding: 22px 16px;
+  }
+
+  h1 { font-size: 32px; }
+
+  .head,
+  .info,
+  .grid-2,
+  .cards,
+  .prompt-list,
+  .marks,
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .time { min-width: 0; }
+}
+
+</style>
+</head>
+<body>
+  <section class="cover flyers">
+    <div>
+      <div class="label">A2 Flyers - Practice Speaking</div>
+      <h1>Flyers Speaking Exam<br>Exam 1</h1>
+      <p class="sub">Examiner booklet for one child and one examiner. Topics match Flyers Exam 1: family, school, food, nature, picnic and classroom.</p>
+    </div>
+    <div class="notice">Practice material in a Cambridge-style layout. Use simple paired pictures or adapt the visuals from the prepared Flyers exam.</div>
+  </section>
+
+  <section class="page flyers">
+    <div class="head flyers">
+      <div>
+        <div class="label">Examiner copy</div>
+        <h2>Script and Candidate Materials</h2>
+      </div>
+      <div class="time">7-9 minutes<br>1 child</div>
+    </div>
+
+    <div class="info">
+      <div><strong>Part 1:</strong> Find the differences.</div>
+      <div><strong>Part 2:</strong> Information exchange.</div>
+      <div><strong>Part 3-4:</strong> Picture story and personal questions.</div>
+    </div>
+
+    <div class="topic"><strong>Topic focus:</strong> family picnic, school information, food, nature, classroom objects.</div>
+
+    <div class="script">
+      <div class="script-label">Opening script - read aloud</div>
+      <div class="script-text">
+        <p>Hello. My name is _______. What's your name?</p>
+        <p>How old are you?</p>
+        <p>Thank you. Now we are going to look at some pictures.</p>
+      </div>
+    </div>
+
+    <div class="part">
+      <div class="part-title"><span>Part 1 - Find the Differences</span><small>about 2 minutes</small></div>
+      <div class="part-body">
+        <div class="script">
+          <div class="script-label">Interlocutor says</div>
+          <div class="script-text">
+            <p>Here are two pictures. They look the same, but some things are different.</p>
+            <p>I am going to say something about my picture. You tell me how your picture is different.</p>
+            <p><span class="stage">Use two similar park picnic pictures.</span></p>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Examiner says</th><th>Expected candidate response</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>In my picture, the boy is eating a sandwich.</td><td>In my picture, the boy is eating pasta.</td></tr>
+            <tr><td>In my picture, the grandmother is cooking in the kitchen.</td><td>In my picture, the grandmother is watering flowers in the garden.</td></tr>
+            <tr><td>In my picture, the girl is reading under a tree.</td><td>In my picture, the girl is taking photos of flowers.</td></tr>
+            <tr><td>In my picture, the backpack is on the chair.</td><td>In my picture, the backpack is under the chair.</td></tr>
+            <tr><td>In my picture, the star on the wall is blue.</td><td>In my picture, the star is yellow.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="part">
+      <div class="part-title"><span>Part 2 - Information Exchange</span><small>about 2 minutes</small></div>
+      <div class="part-body">
+        <div class="script">
+          <div class="script-label">Interlocutor says</div>
+          <div class="script-text">
+            <p>Now we are going to talk about two schools.</p>
+            <p>I don't know about Green Park School, so I am going to ask you some questions. Then you ask me about Sunshine International School.</p>
+            <p><span class="stage">Give the child the Green Park School card. Keep the Sunshine International School card.</span></p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Examiner asks candidate</h3>
+            <ol>
+              <li>How many students are there at Green Park School?</li>
+              <li>What is the favourite subject?</li>
+              <li>What is the best friend's name?</li>
+              <li>What time is lunch?</li>
+              <li>What after-school club is there?</li>
+            </ol>
+          </div>
+          <div class="card">
+            <h3>Candidate asks examiner</h3>
+            <ol>
+              <li>How many students are there at Sunshine International School?</li>
+              <li>What is the favourite subject?</li>
+              <li>What is the best friend's name?</li>
+              <li>What time is lunch?</li>
+              <li>What after-school club is there?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="candidate-card-page">
+      <div class="cards">
+        <div class="large-card">
+          <h3>Candidate Card: Green Park School</h3>
+          <ul>
+            <li>Number of students: 350</li>
+            <li>Favourite subject: art</li>
+            <li>Best friend's name: Daniel</li>
+            <li>Lunch time: quarter past twelve</li>
+            <li>After-school club: nature club</li>
+          </ul>
+        </div>
+        <div class="large-card">
+          <h3>Examiner Card: Sunshine International School</h3>
+          <ul>
+            <li>Number of students: 420</li>
+            <li>Favourite subject: science</li>
+            <li>Best friend's name: Lily</li>
+            <li>Lunch time: half past twelve</li>
+            <li>After-school club: cooking club</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="part">
+      <div class="part-title"><span>Part 3 - Picture Story</span><small>about 2 minutes</small></div>
+      <div class="part-body">
+        <div class="script">
+          <div class="script-label">Interlocutor says</div>
+          <div class="script-text">
+            <p>Now look at these pictures. They show a story. The story is called The Picnic Cake.</p>
+            <p>Look at the pictures first.</p>
+            <p>In picture one, Aunt Maria is carrying a big cake to the picnic blanket. The family are in the park and everyone is happy.</p>
+            <p>Now you tell the story.</p>
+          </div>
+        </div>
+        <table>
+          <tbody>
+            <tr><th>Picture 2</th><td>A boy runs near the blanket with a football. The cake begins to move.</td></tr>
+            <tr><th>Picture 3</th><td>The dog runs to the cake and everyone looks surprised.</td></tr>
+            <tr><th>Picture 4</th><td>The cake is safe. The family sit together and eat lunch.</td></tr>
+          </tbody>
+        </table>
+        <div class="card shaded">
+          <h3>Support prompts if needed</h3>
+          <ul>
+            <li>What is the boy doing?</li>
+            <li>Where is the dog?</li>
+            <li>How do the family feel?</li>
+            <li>What happens at the end?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="part">
+      <div class="part-title"><span>Part 4 - Personal Questions</span><small>about 2 minutes</small></div>
+      <div class="part-body">
+        <div class="script">
+          <div class="script-label">Interlocutor says</div>
+          <div class="script-text"><p>Now let's talk about you.</p></div>
+        </div>
+        <ol>
+          <li>Who do you live with?</li>
+          <li>What do you like doing with your family?</li>
+          <li>What is your favourite food?</li>
+          <li>What do you usually eat for lunch?</li>
+          <li>Do you like studying science? Why / Why not?</li>
+          <li>Do you like going to parks?</li>
+          <li>What animals can you see near your home?</li>
+          <li>What do you do after school?</li>
+        </ol>
+        <div class="script">
+          <div class="script-label">Closing script</div>
+          <div class="script-text"><p>Thank you. That is the end of the test.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="assessment">
+      <h2>Speaking Assessment Rubric</h2>
+      <p class="stage">Practice classroom rubric for A2 Flyers speaking. Maximum score: 20. The shield estimate is for classroom feedback only.</p>
+      <table class="score-table">
+        <thead>
+          <tr><th>Part</th><th>5</th><th>3</th><th>1</th><th class="score-cell">Score</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Part 1: Find the differences</strong></td>
+            <td>Describes differences clearly using colour, position, number or action.</td>
+            <td>Finds some differences with short answers and some support.</td>
+            <td>Finds very few differences or needs frequent help.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Part 2: Information exchange</strong></td>
+            <td>Answers and asks simple questions accurately.</td>
+            <td>Answers most questions; asks some questions with support.</td>
+            <td>Has difficulty asking or answering information questions.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Part 3: Picture story</strong></td>
+            <td>Tells a clear short story using simple connected sentences.</td>
+            <td>Describes pictures with basic sentences; needs some prompts.</td>
+            <td>Uses isolated words or needs frequent prompting.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Part 4: Personal questions</strong></td>
+            <td>Answers personal questions clearly and adds simple details.</td>
+            <td>Answers most questions with short but understandable responses.</td>
+            <td>Gives very limited answers or often does not respond.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Scoring Table</h2>
+      <div class="total-box">
+        <div><strong>Student name:</strong></div>
+        <div><strong>Date:</strong></div>
+        <div><strong>Examiner:</strong></div>
+      </div>
+      <table>
+        <tbody>
+          <tr><th>Part 1</th><td class="score-cell">/5</td><th>Part 2</th><td class="score-cell">/5</td></tr>
+          <tr><th>Part 3</th><td class="score-cell">/5</td><th>Part 4</th><td class="score-cell">/5</td></tr>
+          <tr><th>Total score</th><td class="score-cell">/20</td><th>Estimated shields</th><td></td></tr>
+        </tbody>
+      </table>
+      <table>
+        <tbody>
+          <tr><th>17-20</th><td>5 shields estimate</td><th>13-16</th><td>4 shields estimate</td></tr>
+          <tr><th>9-12</th><td>3 shields estimate</td><th>5-8</th><td>2 shields estimate</td></tr>
+          <tr><th>1-4</th><td>1 shield estimate</td><th>0</th><td>Not enough spoken evidence</td></tr>
+        </tbody>
+      </table>
+      <div class="comment-box"><strong>Teacher comments and next steps:</strong></div>
+    </div>
+  </section>
+</body>
+</html>

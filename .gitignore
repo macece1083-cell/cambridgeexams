@@ -1,0 +1,30 @@
+# Local deploy/cache folders
+.netlify
+.vercel
+web-site/.vercel
+web-deploy/
+
+# Local tooling installs
+tools/node-portable/
+tools/netlify-cli/
+tools/vercel-cli/
+tools/pg-runner/
+
+# Generated archives and extracted/rendered scratch files
+*.zip
+__pycache__/
+docx_extract/
+rendered_exam/
+rendered_reference/
+_generated_audio_overrides/
+_inspect_images/
+_zip_extract_current/
+
+# Large generated single-file builds and inspection bundles
+BAYETAV_TEK_DOSYA.html
+NGL_BAYETAV_CAMBRIDGE_GOMULU.html
+_bayetav_main_script_check*.js
+netlify-app.bundle.js
+
+# Local login/session outputs
+vercel-login*.txt

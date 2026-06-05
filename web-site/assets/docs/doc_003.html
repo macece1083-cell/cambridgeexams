@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KET Test 1 Speaking Booklet</title>
+  <style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: #16212c;
+  background: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.42;
+}
+
+.cover,
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 30px 36px;
+}
+
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 18px solid #005ea8;
+}
+
+.cover.flyers { border-color: #1f7a4d; }
+
+.label {
+  color: #005ea8;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.flyers .label { color: #1f7a4d; }
+
+h1 {
+  margin: 14px 0 10px;
+  font-size: 40px;
+  line-height: 1.08;
+}
+
+h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.sub {
+  max-width: 740px;
+  color: #52606d;
+  font-size: 17px;
+}
+
+.notice {
+  border: 1.5px solid #aeb8c2;
+  border-left: 6px solid #9b1c1c;
+  padding: 11px 13px;
+  color: #52606d;
+  font-size: 13px;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: start;
+  border-bottom: 3px solid #005ea8;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.head.flyers { border-color: #1f7a4d; }
+
+.time {
+  min-width: 170px;
+  text-align: center;
+  color: #fff;
+  background: #005ea8;
+  padding: 9px 12px;
+  font-weight: 700;
+}
+
+.flyers .time { background: #1f7a4d; }
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.info div,
+.card {
+  border: 1.5px solid #aeb8c2;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.info div {
+  background: #f3f6f9;
+  font-size: 12px;
+}
+
+.topic {
+  margin: 12px 0 18px;
+  padding: 10px 12px;
+  background: #e8f3fc;
+  border-left: 5px solid #005ea8;
+}
+
+.flyers .topic {
+  background: #edf8f2;
+  border-color: #1f7a4d;
+}
+
+.part {
+  margin: 18px 0;
+  border: 1.5px solid #aeb8c2;
+  break-inside: avoid;
+}
+
+.part-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  color: #fff;
+  background: #005ea8;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.flyers .part-title { background: #1f7a4d; }
+
+.part-title small {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.part-body { padding: 12px; }
+
+.script {
+  border: 1.5px solid #8a5a00;
+  background: #fff7e6;
+  margin: 10px 0 12px;
+}
+
+.script-label {
+  padding: 6px 9px;
+  color: #fff;
+  background: #8a5a00;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.script-text {
+  padding: 10px 12px;
+}
+
+.script-text p { margin: 0 0 8px; }
+.script-text p:last-child { margin-bottom: 0; }
+
+.stage {
+  color: #52606d;
+  font-style: italic;
+}
+
+.grid-2,
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card.shaded { background: #f3f6f9; }
+
+.card h3,
+.card h4 {
+  color: #005ea8;
+}
+
+.flyers .card h3,
+.flyers .card h4 {
+  color: #1f7a4d;
+}
+
+ol,
+ul {
+  margin: 6px 0 0 20px;
+  padding: 0;
+}
+
+li { margin: 4px 0; }
+
+.prompt-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 10px 0 12px;
+  list-style: none;
+}
+
+.prompt-list li {
+  margin: 0;
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 1.5px solid #aeb8c2;
+  background: #f3f6f9;
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 12px;
+}
+
+th,
+td {
+  border: 1.5px solid #aeb8c2;
+  padding: 7px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th { background: #f3f6f9; }
+
+.candidate-card-page {
+  border: 2px dashed #aeb8c2;
+  padding: 14px;
+  margin: 16px 0;
+  break-inside: avoid;
+}
+
+.large-card {
+  min-height: 175px;
+  padding: 15px;
+  border: 2px solid #16212c;
+  background: #fff;
+}
+
+.large-card h3 {
+  text-align: center;
+  color: #16212c;
+}
+
+.marks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.marks div {
+  border: 1.5px solid #aeb8c2;
+  background: #f3f6f9;
+  padding: 8px;
+  font-size: 12px;
+}
+
+.assessment {
+  margin-top: 22px;
+  border-top: 3px solid #005ea8;
+  padding-top: 14px;
+  break-inside: avoid;
+}
+
+.flyers .assessment {
+  border-color: #1f7a4d;
+}
+
+.assessment h2 {
+  margin-bottom: 10px;
+}
+
+.score-table td,
+.score-table th {
+  height: 34px;
+}
+
+.score-cell {
+  width: 70px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.total-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.total-box div {
+  min-height: 50px;
+  border: 1.5px solid #aeb8c2;
+  padding: 8px;
+  background: #fff;
+}
+
+.comment-box {
+  min-height: 92px;
+  border: 1.5px solid #aeb8c2;
+  padding: 8px;
+  background: #fff;
+}
+
+.hub {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 34px 36px;
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.hub-card {
+  border: 1.5px solid #aeb8c2;
+  padding: 16px;
+  background: #fff;
+}
+
+.hub-card h2 {
+  font-size: 21px;
+  margin-bottom: 8px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 11px;
+  color: #fff;
+  background: #005ea8;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 2px;
+}
+
+.btn.secondary {
+  color: #005ea8;
+  background: #e8f3fc;
+}
+
+.btn.flyers {
+  background: #1f7a4d;
+}
+
+.btn.flyers.secondary {
+  color: #1f7a4d;
+  background: #edf8f2;
+}
+
+@media print {
+  .cover,
+  .page {
+    max-width: none;
+    min-height: auto;
+    padding: 15mm;
+  }
+
+  .part,
+  .script,
+  .candidate-card-page,
+  .large-card {
+    break-inside: avoid;
+  }
+}
+
+@media (max-width: 800px) {
+  .cover,
+  .page,
+  .hub {
+    padding: 22px 16px;
+  }
+
+  h1 { font-size: 32px; }
+
+  .head,
+  .info,
+  .grid-2,
+  .cards,
+  .prompt-list,
+  .marks,
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .time { min-width: 0; }
+}
+
+</style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="label">A2 Key for Schools - Practice Speaking</div>
+      <h1>KET Speaking Exam<br>Test 1</h1>
+      <p class="sub">Examiner booklet for one student and one examiner. Topics match KET Test 1: animals, city parks, school subjects, jobs and nature trips.</p>
+    </div>
+    <div class="notice">Practice adaptation: official A2 Key speaking is normally taken with two candidates. This version is designed for one-to-one classroom testing.</div>
+  </section>
+
+  <section class="page">
+    <div class="head">
+      <div>
+        <div class="label">Examiner copy</div>
+        <h2>Script and Materials</h2>
+      </div>
+      <div class="time">8-10 minutes<br>1 student</div>
+    </div>
+
+    <div class="info">
+      <div><strong>Part 1:</strong> Interview and personal information.</div>
+      <div><strong>Part 2:</strong> Individual talk with examiner follow-up.</div>
+      <div><strong>Materials:</strong> One prompt card for Part 2.</div>
+    </div>
+
+    <div class="topic"><strong>Topic focus:</strong> animals in the city, night walks, parks, school subjects, future jobs, wildlife trips.</div>
+
+    <div class="script">
+      <div class="script-label">Opening script - read aloud</div>
+      <div class="script-text">
+        <p>Good morning / afternoon. My name is _______.</p>
+        <p>What is your name? And what is your surname?</p>
+        <p>How old are you? Thank you.</p>
+      </div>
+    </div>
+
+    <div class="part">
+      <div class="part-title"><span>Part 1 - Interview</span><small>4 minutes</small></div>
+      <div class="part-body">
+        <div class="script">
+          <div class="script-label">Interlocutor says</div>
+          <div class="script-text">
+            <p>First, I am going to ask you some questions about yourself.</p>
+            <p><span class="stage">Ask 6-8 questions. Use follow-up questions when the answer is short.</span></p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Main questions</h3>
+            <ol>
+              <li>Where do you live?</li>
+              <li>What do you like about your town or city?</li>
+              <li>How do you get to school?</li>
+              <li>What is your favourite subject at school?</li>
+              <li>Do you like science or geography? Why?</li>
+              <li>What do you usually do after school?</li>
+              <li>Do you like going to parks? Why / Why not?</li>
+              <li>What job would you like to do in the future?</li>
+            </ol>
+          </div>
+          <div class="card shaded">
+            <h3>Follow-up prompts</h3>
+            <ul>
+              <li>Tell me more about that.</li>
+              <li>Why do you like it?</li>
+              <li>Who do you usually go with?</li>
+              <li>When did you last do that?</li>
+              <li>Would you like to do that again?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="part">
+      <div class="part-title"><span>Part 2 - Individual Talk and Discussion</span><small>4-6 minutes</small></div>
+      <div class="part-body">
+        <div class="script">
+          <div class="script-label">Interlocutor says</div>
+          <div class="script-text">
+            <p>Now I am going to give you some ideas. Your school is planning a nature activity for students.</p>
+            <p>Please look at the ideas. First, tell me which activities you like and why. Then choose the best activity for your class.</p>
+            <p><span class="stage">Give the student the prompt card. Let the student speak for about one minute. Then ask follow-up questions.</span></p>
+          </div>
+        </div>
+
+        <ul class="prompt-list">
+          <li>a night walk in the park</li>
+          <li>a visit to the zoo</li>
+          <li>making a video about city animals</li>
+          <li>taking photos at a wildlife park</li>
+          <li>doing a geography quiz about animals and places</li>
+        </ul>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Examiner follow-up questions</h3>
+            <ol>
+              <li>Which activity is the most interesting for you?</li>
+              <li>Which activity is good for learning English?</li>
+              <li>Would you prefer to go in the morning or in the evening?</li>
+              <li>What should students bring?</li>
+              <li>Is it better to work alone or in a group?</li>
+            </ol>
+          </div>
+          <div class="card shaded">
+            <h3>Useful candidate language</h3>
+            <ul>
+              <li>I think ... because ...</li>
+              <li>I would choose ...</li>
+              <li>In my opinion, ...</li>
+              <li>I prefer ... because ...</li>
+              <li>This is a good idea because ...</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="script">
+          <div class="script-label">Closing script</div>
+          <div class="script-text">
+            <p>Thank you. That is the end of the test.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="assessment">
+      <h2>Speaking Assessment Rubric</h2>
+      <p class="stage">Practice classroom rubric for the one-student KET speaking adaptation. Maximum score: 20.</p>
+      <table class="score-table">
+        <thead>
+          <tr><th>Criterion</th><th>5</th><th>3</th><th>1</th><th class="score-cell">Score</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Grammar and vocabulary</strong></td>
+            <td>Uses simple A2 grammar and topic vocabulary clearly; errors do not stop communication.</td>
+            <td>Uses basic phrases; some errors or repeated words, but meaning is usually clear.</td>
+            <td>Very limited language; frequent errors make meaning difficult.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Pronunciation</strong></td>
+            <td>Generally clear; word stress and sounds are easy to understand.</td>
+            <td>Mostly understandable; examiner sometimes needs repetition.</td>
+            <td>Often unclear; examiner needs frequent repetition.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Interaction with examiner</strong></td>
+            <td>Answers naturally, responds to follow-up questions, and keeps the conversation going.</td>
+            <td>Answers questions but needs some support or prompting.</td>
+            <td>Gives very short answers and needs a lot of support.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>Task achievement</strong></td>
+            <td>Gives relevant answers, simple reasons, and chooses an activity with explanation.</td>
+            <td>Completes most of the task with short reasons.</td>
+            <td>Completes only small parts of the task.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Scoring Table</h2>
+      <div class="total-box">
+        <div><strong>Student name:</strong></div>
+        <div><strong>Date:</strong></div>
+        <div><strong>Examiner:</strong></div>
+      </div>
+      <table>
+        <tbody>
+          <tr><th>Grammar and vocabulary</th><td class="score-cell">/5</td><th>Pronunciation</th><td class="score-cell">/5</td></tr>
+          <tr><th>Interaction with examiner</th><td class="score-cell">/5</td><th>Task achievement</th><td class="score-cell">/5</td></tr>
+          <tr><th>Total score</th><td class="score-cell">/20</td><th>Practice band</th><td></td></tr>
+        </tbody>
+      </table>
+      <table>
+        <tbody>
+          <tr><th>18-20</th><td>Strong A2 performance</td><th>14-17</th><td>Good A2 performance</td></tr>
+          <tr><th>10-13</th><td>Developing A2 performance</td><th>6-9</th><td>Needs support</td></tr>
+          <tr><th>0-5</th><td colspan="3">Limited evidence of A2 speaking ability</td></tr>
+        </tbody>
+      </table>
+      <div class="comment-box"><strong>Teacher comments and next steps:</strong></div>
+    </div>
+  </section>
+</body>
+</html>
