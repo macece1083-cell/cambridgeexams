@@ -14,7 +14,7 @@ teacher_note text,
 updated_by uuid references auth.users(id),
 created_at timestamptz not null default now(),
 updated_at timestamptz not null default now(),
-unique (exam_id, student_no)
+unique (exam_id, class_name, student_no)
 );
 alter table public.exam_scores enable row level security;
 drop policy if exists teachers_read_scores on public.exam_scores;

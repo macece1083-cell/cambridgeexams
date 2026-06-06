@@ -31,7 +31,7 @@ create table if not exists public.exam_scores (
   updated_by uuid references auth.users(id),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  unique (exam_id, student_no)
+  unique (exam_id, class_name, student_no)
 );
 
 create table if not exists public.score_audit_log (
