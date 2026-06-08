@@ -45,7 +45,7 @@ function New-DataUri {
 }
 
 $script:AudioOverrideCacheDir = Join-Path $PSScriptRoot '_generated_audio_overrides'
-$script:AudioVoiceModeVersion = 'dialog-voices-v1'
+$script:AudioVoiceModeVersion = 'dialog-voices-v2-no-labels'
 
 function ConvertTo-SapiDialogueXml {
   param([string]$Text)
