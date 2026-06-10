@@ -56,45 +56,47 @@ function ConvertTo-CertificatePackHtml {
   $newCssFunction = @'
 function certificateCss() {
       return `
-        :root{--blue:#0f63b7;--cyan:#58b7d8;--green:#b9cf55;--ink:#17324a;--muted:#5f7082;--line:#c9d7e4;--paper:#ffffff}
+        :root{--blue:#0f63b7;--deep:#0a3768;--cyan:#58b7d8;--green:#b9cf55;--gold:#c89d2b;--ink:#17324a;--muted:#5f7082;--line:#c9d7e4;--paper:#ffffff}
         *{box-sizing:border-box}
         body{margin:0;background:#edf3f8;color:var(--ink);font-family:Calibri,Arial,sans-serif}
         @page{size:A4 landscape;margin:0}
         .no-print{padding:12px 18px;text-align:center}
         .no-print button{border:0;background:var(--blue);color:#fff;font:inherit;font-weight:700;padding:10px 18px;border-radius:4px;cursor:pointer}
-        .cert-page{position:relative;width:297mm;height:210mm;margin:0 auto;background:var(--paper);padding:14mm 17mm;box-shadow:0 10px 34px rgba(15,42,66,.16);overflow:hidden}
-        .cert-page:before{content:"";position:absolute;inset:8mm;border:1.4pt solid var(--line);pointer-events:none}
-        .cert-page:after{content:"";position:absolute;right:-32mm;top:-38mm;width:118mm;height:118mm;border-radius:50%;background:radial-gradient(circle at center,rgba(88,183,216,.25),rgba(185,207,85,.16) 42%,rgba(15,99,183,.08) 68%,transparent 69%);pointer-events:none}
+        .cert-page{position:relative;width:297mm;height:210mm;margin:0 auto;background:var(--paper);padding:13mm 16mm;box-shadow:0 10px 34px rgba(15,42,66,.16);overflow:hidden}
+        .cert-page:before{content:"";position:absolute;inset:7mm;border:1.5pt solid var(--deep);pointer-events:none}
+        .cert-page:after{content:"e";position:absolute;right:14mm;bottom:9mm;width:42mm;height:42mm;border-radius:50%;display:grid;place-items:center;border:1pt solid rgba(185,207,85,.5);color:rgba(185,207,85,.16);font-size:54pt;font-weight:900;font-family:Georgia,"Times New Roman",serif;pointer-events:none}
         .cert-content{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto 1fr auto;gap:8mm}
-        .cert-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;border-bottom:1pt solid var(--line);padding-bottom:6mm}
+        .cert-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;border-bottom:2pt solid var(--deep);padding-bottom:5mm}
         .brand{text-align:center}
-        .cert-logo{width:50mm;max-height:25mm;object-fit:contain;display:block;margin:0 auto 2mm}
+        .cert-logo{width:48mm;max-height:24mm;object-fit:contain;display:block;margin:0 auto 1.5mm}
         .brand-name{font-size:9.5pt;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
         .cert-ref{text-align:right;color:var(--muted);font-size:9pt;line-height:1.45;text-transform:uppercase;letter-spacing:.08em}
         .cert-kind{color:var(--muted);font-size:9pt;font-weight:700;text-transform:uppercase;letter-spacing:.14em}
-        .main-area{display:grid;grid-template-columns:1.45fr .8fr;gap:12mm;align-items:center}
+        .main-area{display:grid;grid-template-columns:1.34fr .9fr;gap:10mm;align-items:center}
         .cert-kicker{font-size:11pt;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:4mm}
-        .cert-title{font-family:Georgia,"Times New Roman",serif;font-size:36pt;line-height:1.05;font-weight:400;margin:0 0 7mm;color:var(--ink)}
-        .cert-copy{font-size:13pt;line-height:1.42;color:var(--muted);max-width:178mm;margin:0 0 5mm}
-        .candidate-name{font-family:Georgia,"Times New Roman",serif;font-size:31pt;font-weight:700;line-height:1.1;color:var(--ink);border-bottom:1.5pt solid var(--green);padding-bottom:3mm;margin:5mm 0}
-        .details{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;margin-top:7mm}
-        .detail{border:1pt solid var(--line);padding:4mm;min-height:20mm;background:#fbfdff}
+        .cert-title{font-family:Georgia,"Times New Roman",serif;font-size:34pt;line-height:1.05;font-weight:400;margin:0 0 6mm;color:var(--ink)}
+        .cert-copy{font-size:12.5pt;line-height:1.38;color:var(--muted);max-width:178mm;margin:0 0 4mm}
+        .candidate-name{font-family:Georgia,"Times New Roman",serif;font-size:30pt;font-weight:700;line-height:1.1;color:var(--ink);border-bottom:1.5pt solid var(--green);padding-bottom:2.5mm;margin:4mm 0}
+        .details{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-top:6mm}
+        .detail{border:1pt solid var(--line);padding:3.5mm;min-height:18mm;background:#fbfdff}
         .detail span{display:block;font-size:8.5pt;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-bottom:1.8mm}
         .detail strong{display:block;font-size:12pt;color:var(--ink);line-height:1.22}
-        .result-panel{border:1.4pt solid var(--blue);padding:7mm;background:linear-gradient(180deg,#f7fbff,#fff)}
-        .overall{text-align:center;border-bottom:1pt solid var(--line);padding-bottom:5mm;margin-bottom:5mm}
-        .overall-number{font-size:42pt;font-weight:900;color:var(--blue);line-height:1}
+        .result-panel{border:1.4pt solid var(--deep);padding:5.5mm;background:linear-gradient(180deg,#f7fbff,#fff);box-shadow:inset 0 0 0 1.5mm #fff, inset 0 0 0 1.9mm rgba(15,99,183,.16)}
+        .overall{text-align:center;border-bottom:1pt solid var(--line);padding-bottom:4mm;margin-bottom:4mm}
+        .overall-number{font-size:39pt;font-weight:900;color:var(--blue);line-height:1}
         .overall-label{font-size:9pt;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:1mm}
-        .award h2{font-size:20pt;margin:0 0 2mm;color:var(--ink)}
-        .award p{margin:0 0 3mm;color:var(--muted);font-size:11.5pt;line-height:1.35}
-        .components{margin-top:5mm;border-top:1pt solid var(--line)}
-        .component{display:grid;grid-template-columns:1fr auto;gap:4mm;align-items:center;border-bottom:1pt solid var(--line);padding:2.5mm 0;font-size:10.5pt}
-        .component strong{font-size:10.5pt}
+        .award h2{font-size:18pt;margin:0 0 1.5mm;color:var(--ink)}
+        .award p{margin:0 0 2mm;color:var(--muted);font-size:10.8pt;line-height:1.32}
+        .components{margin-top:4mm;border-top:1pt solid var(--line)}
+        .component{display:grid;grid-template-columns:1fr auto;gap:3mm;align-items:center;border-bottom:1pt solid var(--line);padding:2mm 0;font-size:9.8pt}
+        .component strong{font-size:9.8pt}
         .component .score{font-weight:800;color:var(--blue)}
-        .marks{grid-column:1 / -1;display:flex;gap:1.5mm}
-        .bayetav-mark{width:6mm;height:6mm;border-radius:50%;display:inline-grid;place-items:center;border:1pt solid var(--blue);color:var(--blue);font-size:7pt;font-weight:900;background:#fff}
-        .bayetav-mark.on{background:var(--blue);color:#fff}
-        .notes{margin-top:5mm;border-left:3pt solid var(--green);background:#f8fbef;padding:3mm 4mm;color:var(--muted);font-size:10pt}
+        .scorebar{grid-column:1 / -1;height:2.2mm;border-radius:99px;background:#dfeaf3;overflow:hidden}
+        .scorebar span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--cyan),var(--blue))}
+        .marks{grid-column:1 / -1;display:flex;gap:1.3mm}
+        .bayetav-mark{width:5.2mm;height:5.2mm;border-radius:50%;display:inline-grid;place-items:center;border:1pt solid var(--green);color:var(--green);font-size:8pt;font-weight:900;font-family:Georgia,"Times New Roman",serif;background:#fff;line-height:1}
+        .bayetav-mark.on{background:var(--green);color:#fff;box-shadow:0 0 0 1pt rgba(15,99,183,.12)}
+        .notes{margin-top:4mm;border-left:3pt solid var(--green);background:#f8fbef;padding:3mm 4mm;color:var(--muted);font-size:9.8pt}
         .signature-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16mm;align-items:end}
         .signature{border-top:1pt solid var(--ink);padding-top:2.5mm;font-size:10pt;color:var(--muted);text-align:center}
         .footer-note{position:absolute;left:17mm;right:17mm;bottom:6mm;text-align:center;color:var(--muted);font-size:8.5pt}
@@ -111,8 +113,13 @@ function certificateHtml(data) {
       const logoUri = "__BAYETAV_CERT_LOGO_URI__";
       const logoTag = logoUri ? '<img class="cert-logo" src="' + logoUri + '" alt="BAYETAV Okullari logo">' : "";
       const notes = data.notes ? '<div class="notes"><strong>Teacher notes:</strong> ' + escapeHtml(data.notes) + '</div>' : "";
+      const readingMax = Math.max(1, Math.ceil(data.maxRw / 2));
+      const writingMax = Math.max(1, data.maxRw - readingMax);
+      const reading = Math.min(readingMax, Math.round(data.rw * readingMax / data.maxRw));
+      const writing = Math.max(0, data.rw - reading);
       const components = componentRow("Listening", data.listening, data.maxListening) +
-        componentRow("Reading & Writing", data.rw, data.maxRw) +
+        componentRow("Reading", reading, readingMax) +
+        componentRow("Writing", writing, writingMax) +
         componentRow("Speaking", data.speaking, data.maxSpeaking);
       return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>BAYETAV Certificate - ' + escapeHtml(data.name) + '</title><style>' + certificateCss() + '</style></head><body>' +
         '<div class="no-print"><button onclick="window.print()">Print / Save as PDF</button></div>' +
@@ -162,14 +169,26 @@ function componentRow(label, score, max) {
       return '<div class="component">' +
         '<strong>' + label + '</strong>' +
         '<div class="score">' + formatScore(score) + ' / ' + formatScore(max) + ' - ' + pct + '%</div>' +
+        '<div class="scorebar"><span style="width:' + pct + '%"></span></div>' +
         '<div class="marks">' + bayetavMarks(componentMarks(score, max)) + '</div>' +
       '</div>';
+    }
+'@
+
+  $newBayetavMarksFunction = @'
+function bayetavMarks(count) {
+      let html = "";
+      for (let i = 1; i <= 5; i += 1) {
+        html += '<span class="bayetav-mark' + (i <= count ? " on" : "") + '">e</span>';
+      }
+      return html;
     }
 '@
 
   $out = [regex]::Replace($Html, '(?s)function certificateCss\(\) \{.*?\r?\n    \}\r?\n\r?\n    function componentRow', $newCssFunction + "`r`n`r`n    function componentRow", 1)
   $out = [regex]::Replace($out, '(?s)function componentRow\(label, score, max\) \{.*?\r?\n    \}\r?\n\r?\n    function certificateHtml', $newComponentFunction + "`r`n`r`n    function certificateHtml", 1)
   $out = [regex]::Replace($out, '(?s)function certificateHtml\(data\) \{.*?\r?\n    \}\r?\n\r?\n    function openCertificate', $newCertificateFunction + "`r`n`r`n    function openCertificate", 1)
+  $out = [regex]::Replace($out, '(?s)function bayetavMarks\(count\) \{.*?\r?\n    \}\r?\n\r?\n    function resultInfo', $newBayetavMarksFunction + "`r`n`r`n    function resultInfo", 1)
   $out = $out.Replace('<td><button class="btn cert-btn" type="button" data-cert-row>Sertifika haz&#305;rla</button></td>', '<td><button class="btn cert-btn" type="button" data-cert-row>Logolu sertifika</button></td>')
   return $out
 }
