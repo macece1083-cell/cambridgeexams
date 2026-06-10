@@ -823,6 +823,144 @@ function New-Flyers2SpeakingBookletHtml {
   return $template
 }
 
+function ConvertTo-Ket2SpeakingImagesHtml {
+  param(
+    [string]$Html,
+    [hashtable]$Images
+  )
+
+  if (-not $Html) { return $Html }
+  if (-not $Images) { return $Html }
+
+  $visualCss = @'
+
+.visual-prompts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+
+.visual-card {
+  border: 1.5px solid #aeb8c2;
+  background: #fff;
+  padding: 10px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.visual-card.feature {
+  grid-column: span 2;
+}
+
+.visual-card img {
+  width: 100%;
+  height: 155px;
+  object-fit: contain;
+  display: block;
+  border: 1.2px solid #16212c;
+  background: #fff;
+}
+
+.visual-card.feature img {
+  height: 210px;
+}
+
+.visual-card h4 {
+  margin: 8px 0 4px;
+  color: #005ea8;
+  font-size: 13pt;
+}
+
+.visual-card p {
+  margin: 0;
+  color: #52606d;
+  font-weight: 700;
+}
+
+.examiner-visual-note {
+  border: 1.5px dashed #aeb8c2;
+  background: #f8fbff;
+  padding: 10px;
+  margin: 12px 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.examiner-visual-note img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  display: block;
+  border: 1.2px solid #16212c;
+  background: #fff;
+  margin-top: 8px;
+}
+
+'@
+
+  if ($Html -notmatch '\.visual-prompts') {
+    $Html = $Html.Replace('table {', $visualCss + 'table {')
+  }
+
+  $promptCards = @"
+        <div class="visual-prompts" aria-label="KET Test 2 speaking visual prompts">
+          <div class="visual-card feature">
+            <img src="$($Images.Fashion)" alt="Recycled fashion show speaking prompt">
+            <h4>A recycled fashion show</h4>
+            <p>Talk about what students could make, why people would watch it and what it teaches.</p>
+          </div>
+          <div class="visual-card">
+            <img src="$($Images.Gadgets)" alt="Old gadgets poster speaking prompt">
+            <h4>A poster about old gadgets</h4>
+            <p>Compare old and new technology and explain which object is most interesting.</p>
+          </div>
+          <div class="visual-card">
+            <img src="$($Images.Museum)" alt="History museum visit speaking prompt">
+            <h4>A visit to a history museum</h4>
+            <p>Say what students might learn there and why it could be better than a lesson.</p>
+          </div>
+          <div class="visual-card">
+            <img src="$($Images.Music)" alt="Music performance speaking prompt">
+            <h4>A music performance with old and new sounds</h4>
+            <p>Describe the performance and decide whether it would be easy to organise.</p>
+          </div>
+          <div class="visual-card">
+            <img src="$($Images.FashionAlt)" alt="Old photograph exhibition comparison prompt">
+            <h4>An old photograph exhibition</h4>
+            <p>Use this as a comparison card: would photos, posters or real clothes make the event stronger?</p>
+          </div>
+        </div>
+"@
+
+  $Html = [regex]::Replace(
+    $Html,
+    '(?s)\s*<ul class="prompt-list">\s*<li>a recycled fashion show</li>\s*<li>a poster about old gadgets</li>\s*<li>a visit to a history museum</li>\s*<li>a music performance with old and new sounds</li>\s*<li>an old photograph exhibition</li>\s*</ul>',
+    "`r`n" + $promptCards,
+    1
+  )
+
+  $followUpInsert = @"
+
+        <div class="examiner-visual-note">
+          <h3>Examiner visual reference</h3>
+          <p class="stage">Use the second fashion picture if the candidate needs a clearer example of recycled clothing, costume detail or audience reaction.</p>
+          <img src="$($Images.FashionAlt)" alt="Alternative fashion show reference for the examiner">
+        </div>
+"@
+
+  if ($Html -notmatch 'Examiner visual reference') {
+    $Html = [regex]::Replace(
+      $Html,
+      '(\s*<div class="grid-2">\s*<div class="card">\s*<h3>Examiner follow-up questions</h3>)',
+      $followUpInsert + '$1',
+      1
+    )
+  }
+
+  return $Html
+}
+
 $script:AudioOverrideCacheDir = Join-Path $PSScriptRoot '_generated_audio_overrides'
 $script:AudioVoiceModeVersion = 'dialog-voices-v2-no-labels'
 
@@ -1096,6 +1234,14 @@ try {
     Story4 = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_7c2c9i7c2c9i7c2c.png')) -Mime 'image/png'
   }
 
+  $ket2SpeakingImages = @{
+    Music = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_jbj5vkjbj5vkjbj5.png')) -Mime 'image/png'
+    Museum = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_4pu0f84pu0f84pu0.png')) -Mime 'image/png'
+    Gadgets = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_vba230vba230vba2.png')) -Mime 'image/png'
+    Fashion = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_e1eqqoe1eqqoe1eq.png')) -Mime 'image/png'
+    FashionAlt = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_e1eqqoe1eqqoe1eq (1).png')) -Mime 'image/png'
+  }
+
   $html = Read-ZipEntryText -Zip $zip -Name 'bayetav_cambridge_exam.html'
   $html = ConvertTo-CertificatePackHtml -Html $html -LogoUri $certificateLogoUri
 
@@ -1350,6 +1496,10 @@ try {
     if ($file -like '*_exam.html' -or $file -like '*duzeltilmis.html') {
       $docHtml = [System.Text.Encoding]::UTF8.GetString($bytes)
       $docHtml = ConvertTo-HarderExamHtml -File $file -Html $docHtml
+      $bytes = [System.Text.Encoding]::UTF8.GetBytes($docHtml)
+    } elseif ($file -eq 'ket_test2_speaking_booklet.html') {
+      $docHtml = [System.Text.Encoding]::UTF8.GetString($bytes)
+      $docHtml = ConvertTo-Ket2SpeakingImagesHtml -Html $docHtml -Images $ket2SpeakingImages
       $bytes = [System.Text.Encoding]::UTF8.GetBytes($docHtml)
     } elseif ($file -eq 'flyers_exam2_speaking_booklet.html') {
       $docHtml = New-Flyers2SpeakingBookletHtml -Images $flyers2SpeakingImages
