@@ -44,6 +44,437 @@ function New-DataUri {
   return "data:$Mime;base64," + [Convert]::ToBase64String($Bytes)
 }
 
+function ConvertTo-CertificatePackHtml {
+  param(
+    [string]$Html,
+    [string]$LogoUri
+  )
+
+  if (-not $Html) { return $Html }
+  if (-not $LogoUri) { return $Html }
+
+  $newCssFunction = @'
+function certificateCss() {
+      return `
+        :root{--blue:#0f63b7;--cyan:#58b7d8;--green:#b9cf55;--ink:#17324a;--muted:#5f7082;--line:#c9d7e4;--paper:#ffffff}
+        *{box-sizing:border-box}
+        body{margin:0;background:#edf3f8;color:var(--ink);font-family:Calibri,Arial,sans-serif}
+        @page{size:A4 landscape;margin:0}
+        .no-print{padding:12px 18px;text-align:center}
+        .no-print button{border:0;background:var(--blue);color:#fff;font:inherit;font-weight:700;padding:10px 18px;border-radius:4px;cursor:pointer}
+        .cert-page{position:relative;width:297mm;height:210mm;margin:0 auto;background:var(--paper);padding:14mm 17mm;box-shadow:0 10px 34px rgba(15,42,66,.16);overflow:hidden}
+        .cert-page:before{content:"";position:absolute;inset:8mm;border:1.4pt solid var(--line);pointer-events:none}
+        .cert-page:after{content:"";position:absolute;right:-32mm;top:-38mm;width:118mm;height:118mm;border-radius:50%;background:radial-gradient(circle at center,rgba(88,183,216,.25),rgba(185,207,85,.16) 42%,rgba(15,99,183,.08) 68%,transparent 69%);pointer-events:none}
+        .cert-content{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto 1fr auto;gap:8mm}
+        .cert-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;border-bottom:1pt solid var(--line);padding-bottom:6mm}
+        .brand{text-align:center}
+        .cert-logo{width:50mm;max-height:25mm;object-fit:contain;display:block;margin:0 auto 2mm}
+        .brand-name{font-size:9.5pt;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
+        .cert-ref{text-align:right;color:var(--muted);font-size:9pt;line-height:1.45;text-transform:uppercase;letter-spacing:.08em}
+        .cert-kind{color:var(--muted);font-size:9pt;font-weight:700;text-transform:uppercase;letter-spacing:.14em}
+        .main-area{display:grid;grid-template-columns:1.45fr .8fr;gap:12mm;align-items:center}
+        .cert-kicker{font-size:11pt;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:4mm}
+        .cert-title{font-family:Georgia,"Times New Roman",serif;font-size:36pt;line-height:1.05;font-weight:400;margin:0 0 7mm;color:var(--ink)}
+        .cert-copy{font-size:13pt;line-height:1.42;color:var(--muted);max-width:178mm;margin:0 0 5mm}
+        .candidate-name{font-family:Georgia,"Times New Roman",serif;font-size:31pt;font-weight:700;line-height:1.1;color:var(--ink);border-bottom:1.5pt solid var(--green);padding-bottom:3mm;margin:5mm 0}
+        .details{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;margin-top:7mm}
+        .detail{border:1pt solid var(--line);padding:4mm;min-height:20mm;background:#fbfdff}
+        .detail span{display:block;font-size:8.5pt;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-bottom:1.8mm}
+        .detail strong{display:block;font-size:12pt;color:var(--ink);line-height:1.22}
+        .result-panel{border:1.4pt solid var(--blue);padding:7mm;background:linear-gradient(180deg,#f7fbff,#fff)}
+        .overall{text-align:center;border-bottom:1pt solid var(--line);padding-bottom:5mm;margin-bottom:5mm}
+        .overall-number{font-size:42pt;font-weight:900;color:var(--blue);line-height:1}
+        .overall-label{font-size:9pt;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:1mm}
+        .award h2{font-size:20pt;margin:0 0 2mm;color:var(--ink)}
+        .award p{margin:0 0 3mm;color:var(--muted);font-size:11.5pt;line-height:1.35}
+        .components{margin-top:5mm;border-top:1pt solid var(--line)}
+        .component{display:grid;grid-template-columns:1fr auto;gap:4mm;align-items:center;border-bottom:1pt solid var(--line);padding:2.5mm 0;font-size:10.5pt}
+        .component strong{font-size:10.5pt}
+        .component .score{font-weight:800;color:var(--blue)}
+        .marks{grid-column:1 / -1;display:flex;gap:1.5mm}
+        .bayetav-mark{width:6mm;height:6mm;border-radius:50%;display:inline-grid;place-items:center;border:1pt solid var(--blue);color:var(--blue);font-size:7pt;font-weight:900;background:#fff}
+        .bayetav-mark.on{background:var(--blue);color:#fff}
+        .notes{margin-top:5mm;border-left:3pt solid var(--green);background:#f8fbef;padding:3mm 4mm;color:var(--muted);font-size:10pt}
+        .signature-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16mm;align-items:end}
+        .signature{border-top:1pt solid var(--ink);padding-top:2.5mm;font-size:10pt;color:var(--muted);text-align:center}
+        .footer-note{position:absolute;left:17mm;right:17mm;bottom:6mm;text-align:center;color:var(--muted);font-size:8.5pt}
+        @media print{body{background:#fff}.no-print{display:none}.cert-page{box-shadow:none;margin:0}}
+      `;
+    }
+'@
+
+  $newCertificateFunction = @'
+function certificateHtml(data) {
+      const info = resultInfo(data.exam, data.percent);
+      const level = data.exam.type === "flyers" ? "A2 Flyers Practice Exam" : "A2 Key for Schools Practice Test";
+      const certRef = "BAYETAV-" + data.exam.id.toUpperCase() + "-" + String(Date.now()).slice(-6);
+      const logoUri = "__BAYETAV_CERT_LOGO_URI__";
+      const logoTag = logoUri ? '<img class="cert-logo" src="' + logoUri + '" alt="BAYETAV Okullari logo">' : "";
+      const notes = data.notes ? '<div class="notes"><strong>Teacher notes:</strong> ' + escapeHtml(data.notes) + '</div>' : "";
+      const components = componentRow("Listening", data.listening, data.maxListening) +
+        componentRow("Reading & Writing", data.rw, data.maxRw) +
+        componentRow("Speaking", data.speaking, data.maxSpeaking);
+      return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>BAYETAV Certificate - ' + escapeHtml(data.name) + '</title><style>' + certificateCss() + '</style></head><body>' +
+        '<div class="no-print"><button onclick="window.print()">Print / Save as PDF</button></div>' +
+        '<main class="cert-page">' +
+          '<div class="cert-content">' +
+            '<section class="cert-top">' +
+              '<div class="cert-kind">Cambridge Practice</div>' +
+              '<div class="brand">' + logoTag + '<div class="brand-name">Bayetav Okullari</div></div>' +
+              '<div class="cert-ref">Certificate of Achievement<br>Reference: ' + certRef + '</div>' +
+            '</section>' +
+            '<section class="main-area">' +
+              '<div class="statement">' +
+                '<div class="cert-kicker">Statement of Results</div>' +
+                '<h1 class="cert-title">Certificate of Achievement</h1>' +
+                '<p class="cert-copy">This certificate is awarded to</p>' +
+                '<div class="candidate-name">' + escapeHtml(data.name) + '</div>' +
+                '<p class="cert-copy">for completing <strong>' + escapeHtml(data.exam.title) + '</strong> in the <strong>' + level + '</strong> format as part of the BAYETAV English assessment programme.</p>' +
+                '<div class="details">' +
+                  '<div class="detail"><span>Candidate</span><strong>' + escapeHtml(data.name) + '</strong></div>' +
+                  '<div class="detail"><span>Class</span><strong>' + escapeHtml(data.className) + '</strong></div>' +
+                  '<div class="detail"><span>Issue Date</span><strong>' + escapeHtml(data.dateText) + '</strong></div>' +
+                  '<div class="detail"><span>CEFR</span><strong>' + escapeHtml(info.cefr) + '</strong></div>' +
+                '</div>' +
+                notes +
+              '</div>' +
+              '<aside class="result-panel">' +
+                '<div class="overall"><div class="overall-number">' + escapeHtml(info.scale) + '</div><div class="overall-label">' + escapeHtml(info.scaleLabel) + '</div></div>' +
+                '<div class="award"><h2>' + escapeHtml(info.label) + '</h2><p>' + escapeHtml(info.detail) + '</p><p><strong>Total:</strong> ' + formatScore(data.total) + ' / ' + formatScore(data.maxTotal) + ' (' + data.percent + '%)</p></div>' +
+                '<section class="components">' + components + '</section>' +
+              '</aside>' +
+            '</section>' +
+            '<section class="signature-row">' +
+              '<div class="signature">Examiner / Teacher</div>' +
+              '<div class="signature">BAYETAV English Department</div>' +
+              '<div class="signature">School Director</div>' +
+            '</section>' +
+          '</div>' +
+          '<div class="footer-note">Internal practice certificate. This document is prepared for BAYETAV school assessment use and is not an official Cambridge English certificate.</div>' +
+        '</main>' +
+      '</body></html>';
+    }
+'@.Replace('__BAYETAV_CERT_LOGO_URI__', $LogoUri)
+
+  $newComponentFunction = @'
+function componentRow(label, score, max) {
+      const pct = componentPercent(score, max);
+      return '<div class="component">' +
+        '<strong>' + label + '</strong>' +
+        '<div class="score">' + formatScore(score) + ' / ' + formatScore(max) + ' - ' + pct + '%</div>' +
+        '<div class="marks">' + bayetavMarks(componentMarks(score, max)) + '</div>' +
+      '</div>';
+    }
+'@
+
+  $out = [regex]::Replace($Html, '(?s)function certificateCss\(\) \{.*?\r?\n    \}\r?\n\r?\n    function componentRow', $newCssFunction + "`r`n`r`n    function componentRow", 1)
+  $out = [regex]::Replace($out, '(?s)function componentRow\(label, score, max\) \{.*?\r?\n    \}\r?\n\r?\n    function certificateHtml', $newComponentFunction + "`r`n`r`n    function certificateHtml", 1)
+  $out = [regex]::Replace($out, '(?s)function certificateHtml\(data\) \{.*?\r?\n    \}\r?\n\r?\n    function openCertificate', $newCertificateFunction + "`r`n`r`n    function openCertificate", 1)
+  $out = $out.Replace('<td><button class="btn cert-btn" type="button" data-cert-row>Sertifika haz&#305;rla</button></td>', '<td><button class="btn cert-btn" type="button" data-cert-row>Logolu sertifika</button></td>')
+  return $out
+}
+
+function New-Flyers2SpeakingBookletHtml {
+  param([hashtable]$Images)
+
+  $template = @'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flyers Exam 2 Speaking Booklet</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#eef3f6;color:#17212b;font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.35}
+    @page{size:A4;margin:10mm}
+    .cover,.page{width:210mm;min-height:297mm;margin:0 auto 12px;background:#fff;padding:14mm;box-shadow:0 8px 28px rgba(20,35,50,.12);break-after:page;page-break-after:always}
+    .cover{display:flex;flex-direction:column;justify-content:space-between;border-top:12mm solid #1f7a4d}
+    .page.landscape{width:297mm;min-height:210mm}
+    .page:last-child{break-after:auto;page-break-after:auto}
+    .label{font-size:10pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1f7a4d}
+    h1{font-size:36pt;line-height:1.05;margin:8mm 0 4mm}
+    h2{font-size:21pt;margin:0 0 4mm}
+    h3{font-size:14pt;margin:0 0 3mm;color:#1f7a4d}
+    p{margin:0 0 3mm}
+    .sub{max-width:170mm;color:#52606d;font-size:15pt}
+    .notice{border:1.4pt solid #aeb8c2;border-left:5mm solid #1f7a4d;padding:4mm;color:#52606d}
+    .head{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:start;border-bottom:2pt solid #1f7a4d;padding-bottom:4mm;margin-bottom:5mm}
+    .time{background:#1f7a4d;color:#fff;font-weight:800;text-align:center;padding:3mm 5mm;min-width:34mm}
+    .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:4mm 0 6mm}
+    .meta div,.card,.script,.rubric-box{border:1.2pt solid #aeb8c2;padding:3mm;background:#fff}
+    .meta div{background:#edf8f2;font-size:10.5pt}
+    .part-title{display:flex;justify-content:space-between;gap:4mm;background:#1f7a4d;color:#fff;font-weight:800;padding:3mm 4mm;margin:7mm 0 0}
+    .part-body{border:1.2pt solid #aeb8c2;border-top:0;padding:4mm}
+    .script{background:#fff7e6;border-color:#b7791f;margin:3mm 0}
+    .script strong{color:#8a5a00}
+    .stage{color:#52606d;font-style:italic}
+    .visual{width:100%;border:1.4pt solid #17212b;display:block;background:#fff;object-fit:contain}
+    .visual.tall{max-height:136mm}
+    .visual.story{max-height:123mm}
+    .two-pics{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+    .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+    .caption{font-weight:800;text-align:center;margin:2mm 0 1mm}
+    table{width:100%;border-collapse:collapse;margin:3mm 0}
+    th,td{border:1.1pt solid #aeb8c2;padding:2.5mm;text-align:left;vertical-align:top}
+    th{background:#edf8f2}
+    ol,ul{margin:2mm 0 0 6mm;padding:0}
+    li{margin:1.3mm 0}
+    .cards{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+    .candidate-only{border:2pt dashed #1f7a4d;background:#f8fcfa}
+    .answer-line{display:inline-block;min-width:34mm;border-bottom:1pt solid #17212b}
+    .score-table td,.score-table th{height:10mm}
+    .score-cell{width:24mm;text-align:center;font-weight:800}
+    .comments{min-height:32mm;border:1.2pt solid #aeb8c2;padding:3mm}
+    @media print{body{background:#fff}.cover,.page{box-shadow:none;margin:0}.no-print{display:none}}
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="label">BAYETAV Schools - A2 Flyers Speaking</div>
+      <h1>Flyers Speaking Exam<br>Exam 2</h1>
+      <p class="sub">Complete candidate booklet and interlocutor frame. Theme: city places, health, safety, transport and healthy routines.</p>
+    </div>
+    <div class="notice">Use the candidate pages with the child. The interlocutor pages include the full script, expected answers, support prompts and scoring table.</div>
+  </section>
+
+  <section class="page">
+    <div class="head">
+      <div>
+        <div class="label">Interlocutor Copy</div>
+        <h2>Test Overview</h2>
+      </div>
+      <div class="time">7-9 minutes<br>1 child</div>
+    </div>
+    <div class="meta">
+      <div><strong>Part 1</strong><br>Find the differences</div>
+      <div><strong>Part 2</strong><br>Information exchange</div>
+      <div><strong>Part 3</strong><br>Picture story</div>
+      <div><strong>Part 4</strong><br>Personal questions</div>
+    </div>
+    <div class="script">
+      <p><strong>Opening script:</strong> Hello. My name is __________. What's your name? How old are you? Thank you. Now we are going to look at some pictures.</p>
+    </div>
+    <table>
+      <tbody>
+        <tr><th>Materials</th><td>Part 1 examiner picture and candidate picture; Part 2 information cards; Part 3 four story pictures; scoring sheet.</td></tr>
+        <tr><th>Timing</th><td>Part 1: about 2 minutes. Part 2: about 2 minutes. Part 3: about 2 minutes. Part 4: about 2 minutes.</td></tr>
+        <tr><th>Support rule</th><td>Give one repetition or one simple support question if the child needs help. Do not over-correct grammar during the response.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="page landscape">
+    <div class="head">
+      <div><div class="label">Candidate Booklet</div><h2>Part 1 - Find the Differences</h2></div>
+      <div class="time">Candidate Picture</div>
+    </div>
+    <p class="stage">The child looks at this picture. The interlocutor keeps the examiner picture.</p>
+    <img class="visual tall" src="__PART1_CANDIDATE__" alt="Candidate city picture for Flyers speaking part 1">
+  </section>
+
+  <section class="page landscape">
+    <div class="head">
+      <div><div class="label">Interlocutor Reference</div><h2>Part 1 - Examiner and Candidate Pictures</h2></div>
+      <div class="time">About 2 minutes</div>
+    </div>
+    <div class="two-pics">
+      <div>
+        <div class="caption">Examiner picture</div>
+        <img class="visual" src="__PART1_EXAMINER__" alt="Examiner city picture">
+      </div>
+      <div>
+        <div class="caption">Candidate picture</div>
+        <img class="visual" src="__PART1_CANDIDATE__" alt="Candidate city picture">
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="part-title"><span>Part 1 - Interlocutor Script</span><span>Find the differences</span></div>
+    <div class="part-body">
+      <div class="script">
+        <p><strong>Interlocutor:</strong> Here are two pictures. They look the same, but some things are different. I am going to say something about my picture. You tell me how your picture is different.</p>
+      </div>
+      <table>
+        <thead><tr><th>Interlocutor says</th><th>Expected candidate response</th><th>Support prompt</th></tr></thead>
+        <tbody>
+          <tr><td>In my picture, the doctor is outside the hospital.</td><td>In my picture, the doctor is inside / by the hospital door.</td><td>Where is the doctor?</td></tr>
+          <tr><td>In my picture, the boy is riding a bicycle.</td><td>In my picture, the boy is walking with a dog.</td><td>What is the boy doing?</td></tr>
+          <tr><td>In my picture, the bus is green.</td><td>In my picture, the bus is red.</td><td>What colour is the bus?</td></tr>
+          <tr><td>In my picture, the police officer is stopping the cars.</td><td>In my picture, the police officer is talking to a driver.</td><td>Who is the police officer talking to?</td></tr>
+          <tr><td>In my picture, the bridge is blue.</td><td>In my picture, the bridge is grey.</td><td>What colour is the bridge?</td></tr>
+          <tr><td>In my picture, the bus is near the bridge.</td><td>In my picture, the bus is in the middle of the road.</td><td>Where is the bus?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="part-title"><span>Part 2 - Interlocutor Script</span><span>Information exchange</span></div>
+    <div class="part-body">
+      <div class="script">
+        <p><strong>Interlocutor:</strong> Now we are going to talk about two water projects. I don't know about the Blue River Team, so I am going to ask you some questions. Then you ask me about Save Our Water.</p>
+        <p class="stage">Give the child the Blue River Team card. Keep the Save Our Water card.</p>
+      </div>
+      <div class="cards">
+        <div class="card candidate-only">
+          <h3>Candidate Card: Blue River Team</h3>
+          <ul>
+            <li>Students: 25</li>
+            <li>Collects water from: the school roof</li>
+            <li>Uses water for: the school garden</li>
+            <li>Meeting day: Thursday</li>
+            <li>Next project: beach clean-up</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Examiner Card: Save Our Water</h3>
+          <ul>
+            <li>Students: 18</li>
+            <li>Collects water from: rain barrels</li>
+            <li>Uses water for: trees near the playground</li>
+            <li>Meeting day: Friday</li>
+            <li>Next project: plant flowers</li>
+          </ul>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Examiner asks candidate</th><th>Candidate asks examiner</th></tr></thead>
+        <tbody>
+          <tr><td>How many students are in the Blue River Team?</td><td>How many students are in Save Our Water?</td></tr>
+          <tr><td>Where do they collect water from?</td><td>Where do they collect water from?</td></tr>
+          <tr><td>What do they use the water for?</td><td>What do they use the water for?</td></tr>
+          <tr><td>Which day do they meet?</td><td>Which day do they meet?</td></tr>
+          <tr><td>What is their next project?</td><td>What is their next project?</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="head">
+      <div><div class="label">Candidate Booklet</div><h2>Part 2 - Blue River Team</h2></div>
+      <div class="time">Candidate Card</div>
+    </div>
+    <div class="card candidate-only">
+      <h3>Blue River Team</h3>
+      <ul>
+        <li><strong>Students:</strong> 25</li>
+        <li><strong>Collects water from:</strong> the school roof</li>
+        <li><strong>Uses water for:</strong> the school garden</li>
+        <li><strong>Meeting day:</strong> Thursday</li>
+        <li><strong>Next project:</strong> beach clean-up</li>
+      </ul>
+    </div>
+    <h3 style="margin-top:9mm">Ask about Save Our Water</h3>
+    <ol>
+      <li>How many students <span class="answer-line"></span>?</li>
+      <li>Where do they collect water from?</li>
+      <li>What do they use the water for?</li>
+      <li>Which day do they meet?</li>
+      <li>What is their next project?</li>
+    </ol>
+  </section>
+
+  <section class="page landscape">
+    <div class="head">
+      <div><div class="label">Candidate Booklet</div><h2>Part 3 - Picture Story</h2></div>
+      <div class="time">A Healthy Day in the City</div>
+    </div>
+    <div class="story-grid">
+      <div><div class="caption">Picture 1</div><img class="visual story" src="__STORY1__" alt="Defne fills her water bottle before school"></div>
+      <div><div class="caption">Picture 2</div><img class="visual story" src="__STORY2__" alt="Defne runs in the park with a friend"></div>
+      <div><div class="caption">Picture 3</div><img class="visual story" src="__STORY3__" alt="Kerem has a toothache in the park"></div>
+      <div><div class="caption">Picture 4</div><img class="visual story" src="__STORY4__" alt="A doctor checks Kerem and the children eat soup"></div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="part-title"><span>Part 3 - Interlocutor Script</span><span>Picture story</span></div>
+    <div class="part-body">
+      <div class="script">
+        <p><strong>Interlocutor:</strong> Now look at these pictures. They show a story. The story is called <strong>A Healthy Day in the City</strong>.</p>
+        <p>Look at the pictures first. In picture one, Defne is filling her water bottle before school. It is a sunny morning and she is getting ready for the day.</p>
+        <p>Now you tell the story.</p>
+      </div>
+      <table>
+        <thead><tr><th>Picture</th><th>Expected story content</th><th>Support prompt if needed</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>Defne goes to the park. She runs with her friend and they look happy.</td><td>Where are the children? What are they doing?</td></tr>
+          <tr><td>3</td><td>They see Kerem near the bench. He has a toothache and looks worried or in pain.</td><td>What is wrong with the boy?</td></tr>
+          <tr><td>4</td><td>A doctor or nurse checks Kerem. Later, the children eat healthy soup and drink water.</td><td>Who helps him? What do the children eat?</td></tr>
+        </tbody>
+      </table>
+      <div class="card">
+        <h3>Good candidate language</h3>
+        <p>First, then, after that, later, because, so, toothache, healthy, bottle, vegetables, doctor, soup.</p>
+      </div>
+    </div>
+
+    <div class="part-title"><span>Part 4 - Interlocutor Script</span><span>Personal questions</span></div>
+    <div class="part-body">
+      <div class="script"><p><strong>Interlocutor:</strong> Now let's talk about you.</p></div>
+      <ol>
+        <li>Do you live in a city or a town?</li>
+        <li>What places are near your home?</li>
+        <li>How do you usually come to school?</li>
+        <li>What do you do to stay healthy?</li>
+        <li>How much water do you drink every day?</li>
+        <li>What healthy food do you like?</li>
+        <li>When did you last visit a doctor or dentist?</li>
+        <li>Where would you like to go on holiday?</li>
+      </ol>
+      <div class="script"><p><strong>Closing script:</strong> Thank you. That is the end of the test.</p></div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="head">
+      <div><div class="label">Assessment</div><h2>Speaking Score Sheet</h2></div>
+      <div class="time">/20</div>
+    </div>
+    <div class="meta">
+      <div><strong>Student:</strong><br><span class="answer-line"></span></div>
+      <div><strong>Class:</strong><br><span class="answer-line"></span></div>
+      <div><strong>Date:</strong><br><span class="answer-line"></span></div>
+      <div><strong>Examiner:</strong><br><span class="answer-line"></span></div>
+    </div>
+    <table class="score-table">
+      <thead><tr><th>Part</th><th>5</th><th>3</th><th>1</th><th class="score-cell">Score</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Part 1</strong></td><td>Clear differences with full phrases.</td><td>Some correct differences, short phrases.</td><td>Very limited or frequent help.</td><td></td></tr>
+        <tr><td><strong>Part 2</strong></td><td>Answers and asks accurately.</td><td>Mostly clear with some support.</td><td>Difficulty asking or answering.</td><td></td></tr>
+        <tr><td><strong>Part 3</strong></td><td>Connected story with sequence words.</td><td>Basic picture descriptions.</td><td>Single words or much prompting.</td><td></td></tr>
+        <tr><td><strong>Part 4</strong></td><td>Personal answers with details.</td><td>Short but understandable answers.</td><td>Very limited answers.</td><td></td></tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr><th>Total score</th><td class="score-cell">/20</td><th>Estimated shields</th><td></td></tr>
+        <tr><th>17-20</th><td>5 shields</td><th>13-16</th><td>4 shields</td></tr>
+        <tr><th>9-12</th><td>3 shields</td><th>5-8</th><td>2 shields</td></tr>
+      </tbody>
+    </table>
+    <div class="comments"><strong>Teacher comments and next steps:</strong></div>
+  </section>
+</body>
+</html>
+'@
+
+  $replacements = @{
+    '__PART1_EXAMINER__' = $Images.Part1Examiner
+    '__PART1_CANDIDATE__' = $Images.Part1Candidate
+    '__STORY1__' = $Images.Story1
+    '__STORY2__' = $Images.Story2
+    '__STORY3__' = $Images.Story3
+    '__STORY4__' = $Images.Story4
+  }
+  foreach ($key in $replacements.Keys) {
+    $template = $template.Replace($key, [string]$replacements[$key])
+  }
+  return $template
+}
+
 $script:AudioOverrideCacheDir = Join-Path $PSScriptRoot '_generated_audio_overrides'
 $script:AudioVoiceModeVersion = 'dialog-voices-v2-no-labels'
 
@@ -302,7 +733,23 @@ function ConvertTo-HarderExamHtml {
 
 $zip = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
 try {
+  $certificateLogoPath = 'C:\Users\User\Desktop\indir.png'
+  $certificateLogoUri = ''
+  if (Test-Path -LiteralPath $certificateLogoPath) {
+    $certificateLogoUri = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes($certificateLogoPath)) -Mime 'image/png'
+  }
+
+  $flyers2SpeakingImages = @{
+    Part1Examiner = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_j4rzppj4rzppj4rz.png')) -Mime 'image/png'
+    Part1Candidate = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_pg4t0ppg4t0ppg4t.png')) -Mime 'image/png'
+    Story1 = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_1bfcf51bfcf51bfc.png')) -Mime 'image/png'
+    Story2 = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_9ser5w9ser5w9ser.png')) -Mime 'image/png'
+    Story3 = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_lhvea2lhvea2lhve.png')) -Mime 'image/png'
+    Story4 = New-DataUri -Bytes ([System.IO.File]::ReadAllBytes('C:\Users\User\Downloads\Gemini_Generated_Image_7c2c9i7c2c9i7c2c.png')) -Mime 'image/png'
+  }
+
   $html = Read-ZipEntryText -Zip $zip -Name 'bayetav_cambridge_exam.html'
+  $html = ConvertTo-CertificatePackHtml -Html $html -LogoUri $certificateLogoUri
 
   $html = $html.Replace(
     '        subtitle: "Colour Matters - Feeling Good? - Your Virtual Self - Underwater Mysteries",',
@@ -555,6 +1002,13 @@ try {
     if ($file -like '*_exam.html' -or $file -like '*duzeltilmis.html') {
       $docHtml = [System.Text.Encoding]::UTF8.GetString($bytes)
       $docHtml = ConvertTo-HarderExamHtml -File $file -Html $docHtml
+      $bytes = [System.Text.Encoding]::UTF8.GetBytes($docHtml)
+    } elseif ($file -eq 'flyers_exam2_speaking_booklet.html') {
+      $docHtml = New-Flyers2SpeakingBookletHtml -Images $flyers2SpeakingImages
+      $bytes = [System.Text.Encoding]::UTF8.GetBytes($docHtml)
+    } elseif ($file -eq 'speaking_exam_pack_certificates.html') {
+      $docHtml = [System.Text.Encoding]::UTF8.GetString($bytes)
+      $docHtml = ConvertTo-CertificatePackHtml -Html $docHtml -LogoUri $certificateLogoUri
       $bytes = [System.Text.Encoding]::UTF8.GetBytes($docHtml)
     }
     $uri = New-DataUri -Bytes $bytes -Mime 'text/html;charset=utf-8'

@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(r"C:\Users\User\Documents\bayetav")
-SOURCE = Path(r"C:\Users\User\Downloads\BAYETAV_TEK_DOSYA (1).html")
+SOURCE = ROOT / "BAYETAV_TEK_DOSYA.html"
 OUT_DIR = ROOT / "web-site"
 ASSET_DIR = OUT_DIR / "assets"
 
