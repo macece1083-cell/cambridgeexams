@@ -494,6 +494,335 @@ function New-Flyers2SpeakingBookletHtml {
   return $template
 }
 
+function New-Flyers2SpeakingBookletHtml {
+  param([hashtable]$Images)
+
+  $template = @'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flyers Exam 2 Speaking - Examiner and Interlocutor Booklets</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#eef3f6;color:#17212b;font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.35}
+    @page{size:A4;margin:10mm}
+    .print-nav{position:sticky;top:0;z-index:10;background:#17212b;color:#fff;padding:8px 12px;text-align:center}
+    .print-nav button{border:0;background:#1f7a4d;color:#fff;font:inherit;font-weight:700;padding:8px 14px;border-radius:4px;cursor:pointer;margin:0 4px}
+    .cover,.page{width:210mm;min-height:297mm;margin:0 auto 12px;background:#fff;padding:14mm;box-shadow:0 8px 28px rgba(20,35,50,.12);break-after:page;page-break-after:always}
+    .cover{display:flex;flex-direction:column;justify-content:space-between;border-top:12mm solid #1f7a4d}
+    .divider{display:flex;align-items:center;justify-content:center;text-align:center;background:#17212b;color:#fff}
+    .divider h1{font-size:40pt}
+    .divider .label{color:#b9cf55}
+    .page.landscape{width:297mm;min-height:210mm}
+    .page:last-child{break-after:auto;page-break-after:auto}
+    .label{font-size:10pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1f7a4d}
+    h1{font-size:36pt;line-height:1.05;margin:8mm 0 4mm}
+    h2{font-size:21pt;margin:0 0 4mm}
+    h3{font-size:14pt;margin:0 0 3mm;color:#1f7a4d}
+    p{margin:0 0 3mm}
+    .sub{max-width:170mm;color:#52606d;font-size:15pt}
+    .notice{border:1.4pt solid #aeb8c2;border-left:5mm solid #1f7a4d;padding:4mm;color:#52606d}
+    .head{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:start;border-bottom:2pt solid #1f7a4d;padding-bottom:4mm;margin-bottom:5mm}
+    .time{background:#1f7a4d;color:#fff;font-weight:800;text-align:center;padding:3mm 5mm;min-width:34mm}
+    .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:4mm 0 6mm}
+    .meta div,.card,.script,.rubric-box{border:1.2pt solid #aeb8c2;padding:3mm;background:#fff}
+    .meta div{background:#edf8f2;font-size:10.5pt}
+    .part-title{display:flex;justify-content:space-between;gap:4mm;background:#1f7a4d;color:#fff;font-weight:800;padding:3mm 4mm;margin:7mm 0 0}
+    .part-body{border:1.2pt solid #aeb8c2;border-top:0;padding:4mm}
+    .script{background:#fff7e6;border-color:#b7791f;margin:3mm 0}
+    .script strong{color:#8a5a00}
+    .stage{color:#52606d;font-style:italic}
+    .visual{width:100%;border:1.4pt solid #17212b;display:block;background:#fff;object-fit:contain}
+    .visual.tall{max-height:136mm}
+    .visual.story{max-height:123mm}
+    .two-pics{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+    .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+    .caption{font-weight:800;text-align:center;margin:2mm 0 1mm}
+    table{width:100%;border-collapse:collapse;margin:3mm 0}
+    th,td{border:1.1pt solid #aeb8c2;padding:2.5mm;text-align:left;vertical-align:top}
+    th{background:#edf8f2}
+    ol,ul{margin:2mm 0 0 6mm;padding:0}
+    li{margin:1.3mm 0}
+    .cards{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+    .candidate-only{border:2pt dashed #1f7a4d;background:#f8fcfa}
+    .answer-line{display:inline-block;min-width:34mm;border-bottom:1pt solid #17212b}
+    .score-table td,.score-table th{height:10mm}
+    .score-cell{width:24mm;text-align:center;font-weight:800}
+    .comments{min-height:32mm;border:1.2pt solid #aeb8c2;padding:3mm}
+    .small{font-size:10.5pt;color:#52606d}
+    @media print{body{background:#fff}.print-nav{display:none}.cover,.page{box-shadow:none;margin:0}}
+  </style>
+</head>
+<body>
+  <div class="print-nav">
+    <button onclick="window.print()">Print / Save as PDF</button>
+    <button onclick="document.getElementById('examiner').scrollIntoView()">Examiner Booklet</button>
+    <button onclick="document.getElementById('interlocutor').scrollIntoView()">Interlocutor Booklet</button>
+  </div>
+
+  <section class="cover">
+    <div>
+      <div class="label">BAYETAV Schools - A2 Flyers Speaking</div>
+      <h1>Flyers Speaking Exam<br>Exam 2</h1>
+      <p class="sub">Printable speaking exam pack with the official classroom materials separated into an Examiner Booklet and an Interlocutor Booklet.</p>
+    </div>
+    <div class="notice">Print the Examiner Booklet for the visual materials and score sheet. Print the Interlocutor Booklet for the examiner script, support prompts and expected responses.</div>
+  </section>
+
+  <section id="examiner" class="cover divider">
+    <div>
+      <div class="label">Printable Section 1</div>
+      <h1>Examiner Booklet</h1>
+      <p class="sub" style="color:#d9e6f0">Candidate visual pages, examiner reference pictures, information cards, story cards and score sheet.</p>
+    </div>
+  </section>
+
+  <section class="page landscape">
+    <div class="head">
+      <div><div class="label">Examiner Booklet</div><h2>Part 1 - Candidate Picture</h2></div>
+      <div class="time">Find the Differences</div>
+    </div>
+    <p class="stage">Place this picture in front of the candidate. The examiner keeps the reference picture.</p>
+    <img class="visual tall" src="__PART1_CANDIDATE__" alt="Candidate picture for Flyers speaking part 1">
+  </section>
+
+  <section class="page landscape">
+    <div class="head">
+      <div><div class="label">Examiner Booklet</div><h2>Part 1 - Examiner Reference</h2></div>
+      <div class="time">Do not show both at once</div>
+    </div>
+    <div class="two-pics">
+      <div>
+        <div class="caption">Examiner picture</div>
+        <img class="visual" src="__PART1_EXAMINER__" alt="Examiner city picture">
+      </div>
+      <div>
+        <div class="caption">Candidate picture</div>
+        <img class="visual" src="__PART1_CANDIDATE__" alt="Candidate city picture">
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="head">
+      <div><div class="label">Examiner Booklet</div><h2>Part 2 - Information Exchange Card</h2></div>
+      <div class="time">Candidate Card</div>
+    </div>
+    <div class="card candidate-only">
+      <h3>Blue River Team</h3>
+      <ul>
+        <li><strong>Students:</strong> 25</li>
+        <li><strong>Collects water from:</strong> the school roof</li>
+        <li><strong>Uses water for:</strong> the school garden</li>
+        <li><strong>Meeting day:</strong> Thursday</li>
+        <li><strong>Next project:</strong> beach clean-up</li>
+      </ul>
+    </div>
+    <h3 style="margin-top:9mm">Candidate asks about Save Our Water</h3>
+    <ol>
+      <li>How many students <span class="answer-line"></span>?</li>
+      <li>Where do they collect water from?</li>
+      <li>What do they use the water for?</li>
+      <li>Which day do they meet?</li>
+      <li>What is their next project?</li>
+    </ol>
+  </section>
+
+  <section class="page landscape">
+    <div class="head">
+      <div><div class="label">Examiner Booklet</div><h2>Part 3 - Picture Story</h2></div>
+      <div class="time">A Healthy Day in the City</div>
+    </div>
+    <div class="story-grid">
+      <div><div class="caption">Picture 1</div><img class="visual story" src="__STORY1__" alt="Defne fills her water bottle before school"></div>
+      <div><div class="caption">Picture 2</div><img class="visual story" src="__STORY2__" alt="Children running in the park"></div>
+      <div><div class="caption">Picture 3</div><img class="visual story" src="__STORY3__" alt="A boy has a toothache in the park"></div>
+      <div><div class="caption">Picture 4</div><img class="visual story" src="__STORY4__" alt="A doctor helps and children eat soup"></div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="head">
+      <div><div class="label">Examiner Booklet</div><h2>Speaking Score Sheet</h2></div>
+      <div class="time">/20</div>
+    </div>
+    <div class="meta">
+      <div><strong>Student:</strong><br><span class="answer-line"></span></div>
+      <div><strong>Class:</strong><br><span class="answer-line"></span></div>
+      <div><strong>Date:</strong><br><span class="answer-line"></span></div>
+      <div><strong>Examiner:</strong><br><span class="answer-line"></span></div>
+    </div>
+    <table class="score-table">
+      <thead><tr><th>Part</th><th>5</th><th>3</th><th>1</th><th class="score-cell">Score</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Part 1</strong></td><td>Clear differences with full phrases.</td><td>Some correct differences, short phrases.</td><td>Very limited or frequent help.</td><td></td></tr>
+        <tr><td><strong>Part 2</strong></td><td>Answers and asks accurately.</td><td>Mostly clear with some support.</td><td>Difficulty asking or answering.</td><td></td></tr>
+        <tr><td><strong>Part 3</strong></td><td>Connected story with sequence words.</td><td>Basic picture descriptions.</td><td>Single words or much prompting.</td><td></td></tr>
+        <tr><td><strong>Part 4</strong></td><td>Personal answers with details.</td><td>Short but understandable answers.</td><td>Very limited answers.</td><td></td></tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr><th>Total score</th><td class="score-cell">/20</td><th>Estimated shields</th><td></td></tr>
+        <tr><th>17-20</th><td>5 shields</td><th>13-16</th><td>4 shields</td></tr>
+        <tr><th>9-12</th><td>3 shields</td><th>5-8</th><td>2 shields</td></tr>
+      </tbody>
+    </table>
+    <div class="comments"><strong>Teacher comments and next steps:</strong></div>
+  </section>
+
+  <section id="interlocutor" class="cover divider">
+    <div>
+      <div class="label">Printable Section 2</div>
+      <h1>Interlocutor Booklet</h1>
+      <p class="sub" style="color:#d9e6f0">Full spoken script, expected answers, support prompts and timing notes.</p>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="head">
+      <div>
+        <div class="label">Interlocutor Booklet</div>
+        <h2>Test Overview</h2>
+      </div>
+      <div class="time">7-9 minutes<br>1 child</div>
+    </div>
+    <div class="meta">
+      <div><strong>Part 1</strong><br>Find the differences</div>
+      <div><strong>Part 2</strong><br>Information exchange</div>
+      <div><strong>Part 3</strong><br>Picture story</div>
+      <div><strong>Part 4</strong><br>Personal questions</div>
+    </div>
+    <div class="script">
+      <p><strong>Opening script:</strong> Hello. My name is __________. What's your name? How old are you? Thank you. Now we are going to look at some pictures.</p>
+    </div>
+    <table>
+      <tbody>
+        <tr><th>Materials</th><td>Part 1 examiner picture and candidate picture; Part 2 information cards; Part 3 four story pictures; score sheet.</td></tr>
+        <tr><th>Timing</th><td>Part 1: about 2 minutes. Part 2: about 2 minutes. Part 3: about 2 minutes. Part 4: about 2 minutes.</td></tr>
+        <tr><th>Support rule</th><td>Give one repetition or one simple support question if the child needs help. Do not over-correct grammar during the response.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="page">
+    <div class="part-title"><span>Part 1 - Interlocutor Script</span><span>Find the differences</span></div>
+    <div class="part-body">
+      <div class="script">
+        <p><strong>Interlocutor:</strong> Here are two pictures. They look the same, but some things are different. I am going to say something about my picture. You tell me how your picture is different.</p>
+      </div>
+      <table>
+        <thead><tr><th>Interlocutor says</th><th>Expected candidate response</th><th>Support prompt</th></tr></thead>
+        <tbody>
+          <tr><td>In my picture, the doctor is outside the hospital.</td><td>In my picture, the doctor is inside / by the hospital door.</td><td>Where is the doctor?</td></tr>
+          <tr><td>In my picture, the boy is riding a bicycle.</td><td>In my picture, the boy is walking with a dog.</td><td>What is the boy doing?</td></tr>
+          <tr><td>In my picture, the bus is green.</td><td>In my picture, the bus is red.</td><td>What colour is the bus?</td></tr>
+          <tr><td>In my picture, the police officer is stopping the cars.</td><td>In my picture, the police officer is talking to a driver.</td><td>Who is the police officer talking to?</td></tr>
+          <tr><td>In my picture, the bridge is blue.</td><td>In my picture, the bridge is grey.</td><td>What colour is the bridge?</td></tr>
+          <tr><td>In my picture, the bus is near the bridge.</td><td>In my picture, the bus is in the middle of the road.</td><td>Where is the bus?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="part-title"><span>Part 2 - Interlocutor Script</span><span>Information exchange</span></div>
+    <div class="part-body">
+      <div class="script">
+        <p><strong>Interlocutor:</strong> Now we are going to talk about two water projects. I don't know about the Blue River Team, so I am going to ask you some questions. Then you ask me about Save Our Water.</p>
+        <p class="stage">Give the child the Blue River Team card. Keep the Save Our Water card.</p>
+      </div>
+      <div class="cards">
+        <div class="card candidate-only">
+          <h3>Candidate Card: Blue River Team</h3>
+          <ul>
+            <li>Students: 25</li>
+            <li>Collects water from: the school roof</li>
+            <li>Uses water for: the school garden</li>
+            <li>Meeting day: Thursday</li>
+            <li>Next project: beach clean-up</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Examiner Card: Save Our Water</h3>
+          <ul>
+            <li>Students: 18</li>
+            <li>Collects water from: rain barrels</li>
+            <li>Uses water for: trees near the playground</li>
+            <li>Meeting day: Friday</li>
+            <li>Next project: plant flowers</li>
+          </ul>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Examiner asks candidate</th><th>Candidate asks examiner</th></tr></thead>
+        <tbody>
+          <tr><td>How many students are in the Blue River Team?</td><td>How many students are in Save Our Water?</td></tr>
+          <tr><td>Where do they collect water from?</td><td>Where do they collect water from?</td></tr>
+          <tr><td>What do they use the water for?</td><td>What do they use the water for?</td></tr>
+          <tr><td>Which day do they meet?</td><td>Which day do they meet?</td></tr>
+          <tr><td>What is their next project?</td><td>What is their next project?</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="part-title"><span>Part 3 - Interlocutor Script</span><span>Picture story</span></div>
+    <div class="part-body">
+      <div class="script">
+        <p><strong>Interlocutor:</strong> Now look at these pictures. They show a story. The story is called <strong>A Healthy Day in the City</strong>.</p>
+        <p>Look at the pictures first. In picture one, Defne is filling her water bottle before school. It is a sunny morning and she is getting ready for the day.</p>
+        <p>Now you tell the story.</p>
+      </div>
+      <table>
+        <thead><tr><th>Picture</th><th>Expected story content</th><th>Support prompt if needed</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>Defne goes to the park. She runs with her friend and they look happy.</td><td>Where are the children? What are they doing?</td></tr>
+          <tr><td>3</td><td>They see Kerem near the bench. He has a toothache and looks worried or in pain.</td><td>What is wrong with the boy?</td></tr>
+          <tr><td>4</td><td>A doctor or nurse checks Kerem. Later, the children eat healthy soup and drink water.</td><td>Who helps him? What do the children eat?</td></tr>
+        </tbody>
+      </table>
+      <div class="card">
+        <h3>Good candidate language</h3>
+        <p>First, then, after that, later, because, so, toothache, healthy, bottle, vegetables, doctor, soup.</p>
+      </div>
+    </div>
+
+    <div class="part-title"><span>Part 4 - Interlocutor Script</span><span>Personal questions</span></div>
+    <div class="part-body">
+      <div class="script"><p><strong>Interlocutor:</strong> Now let's talk about you.</p></div>
+      <ol>
+        <li>Do you live in a city or a town?</li>
+        <li>What places are near your home?</li>
+        <li>How do you usually come to school?</li>
+        <li>What do you do to stay healthy?</li>
+        <li>How much water do you drink every day?</li>
+        <li>What healthy food do you like?</li>
+        <li>When did you last visit a doctor or dentist?</li>
+        <li>Where would you like to go on holiday?</li>
+      </ol>
+      <div class="script"><p><strong>Closing script:</strong> Thank you. That is the end of the test.</p></div>
+    </div>
+  </section>
+</body>
+</html>
+'@
+
+  $replacements = @{
+    '__PART1_EXAMINER__' = $Images.Part1Examiner
+    '__PART1_CANDIDATE__' = $Images.Part1Candidate
+    '__STORY1__' = $Images.Story1
+    '__STORY2__' = $Images.Story2
+    '__STORY3__' = $Images.Story3
+    '__STORY4__' = $Images.Story4
+  }
+  foreach ($key in $replacements.Keys) {
+    $template = $template.Replace($key, [string]$replacements[$key])
+  }
+  return $template
+}
+
 $script:AudioOverrideCacheDir = Join-Path $PSScriptRoot '_generated_audio_overrides'
 $script:AudioVoiceModeVersion = 'dialog-voices-v2-no-labels'
 
